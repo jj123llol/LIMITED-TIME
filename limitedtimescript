@@ -194,12 +194,24 @@ Tab:AddButton({
 	Name = "teleport to plane/find plane task",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").Tasks["Find_Plane"].Plane.Union.CFrame)
+	end    
+})
+Tab:AddButton({
+	Name = "teleport to joe/tell him he looks nice",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace")["Hobo joe"].HumanoidRootPart.CFrame)
   	end    
 })
 Tab:AddButton({
 	Name = "teleport to david/tell david you like his beard task",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").David.Head.CFrame)
+  	end    
+})
+Tab:AddButton({
+	Name = "teleport to honey/shake tree to get honey task",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks.Honey.BeeHives.Hive1.CFrame)
   	end    
 })
 Tab:AddButton({
@@ -214,6 +226,28 @@ Tab:AddButton({
       		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_Frame_01"].CFrame)
   	end    
 })
+
+Tab:AddButton({
+	Name = "teleport to man holes/fix them task",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      		wait(1)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      			wait(1)
+      		wait(10)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      			wait(1)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      		wait(10)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      			wait(1)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      		wait(10)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      			wait(1)
+      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+	end    
+  })
 Tab:AddButton({
 	Name = "teleport to cat/find cat task",
 	Callback = function()
@@ -236,5 +270,79 @@ Tab:AddButton({
 	Name = "teleport to david",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").David.Head.CFrame)
+  	end    
+})
+local Section = Tab:AddSection({
+	Name = "joe coffee task"
+})
+Tab:AddButton({
+	Name = "teleport to coffee",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks.CoffeeJoe.Coffee.Detector.CFrame)
+  	end    
+})
+
+
+Tab:AddButton({
+	Name = "teleport to joe",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace")["Hobo joe"].HumanoidRootPart.CFrame)
+  	end    
+})
+local Section = Tab:AddSection({
+	Name = "Find 5 car parts task"
+})
+Tab:AddButton({
+	Name = "teleport to tire",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].w.Rim.CFrame)
+  	end    
+})
+Tab:AddButton({
+	Name = "teleport to seat",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].Seat.Detector.CFrame)
+  	end    
+})
+Tab:AddButton({
+	Name = "teleport to bumper",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].Bumper.Detector.CFrame)
+  	end    
+})
+Tab:AddButton({
+	Name = "teleport to engine",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"]["Car engine"].Part.CFrame)
+  	end    
+})
+Tab:AddButton({
+	Name = "teleport to number plate ",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].NumberPlate.Part.CFrame)
+  	end    
+})
+local Section = Tab:AddSection({
+	Name = "davids secret"
+})
+Tab:AddButton({
+	Name = "teleport to david",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").David.Head.CFrame)
+  	end    
+})
+local Section = Tab:AddSection({
+	Name = "Find gas can and fill car"
+})
+Tab:AddButton({
+	Name = "teleport to can",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks.GasCan.Handle.CFrame)
+  	end    
+})
+Tab:AddButton({
+	Name = "teleport to car",
+	Callback = function()
+      		teleportTO(game:GetService("Workspace").Tasks.GasCan.Part.CFrame)
   	end    
 })
