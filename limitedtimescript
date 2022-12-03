@@ -190,32 +190,47 @@ Tab:AddButton({
 local Section = Tab:AddSection({
 	Name = "other tasks"
 })
+local Section = Tab:AddSection({
+	Name = "Find plane task"
+})
 Tab:AddButton({
-	Name = "teleport to plane/find plane task",
+	Name = "teleport to plane",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").Tasks["Find_Plane"].Plane.Union.CFrame)
 	end    
 })
+local Section = Tab:AddSection({
+	Name = "tell joe he looks nice task"
+})
 Tab:AddButton({
-	Name = "teleport to joe/tell him he looks nice",
+	Name = "teleport to joe",
 	Callback = function()
       		teleportTO(game:GetService("Workspace")["Hobo joe"].HumanoidRootPart.CFrame)
   	end    
 })
+local Section = Tab:AddSection({
+	Name = "tell david you like his beard task"
+})
 Tab:AddButton({
-	Name = "teleport to david/tell david you like his beard task",
+	Name = "teleport to david",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").David.Head.CFrame)
   	end    
 })
+local Section = Tab:AddSection({
+	Name = "shake tree for honey task"
+})
 Tab:AddButton({
-	Name = "teleport to honey/shake tree to get honey task",
+	Name = "teleport to honey",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").Tasks.Honey.BeeHives.Hive1.CFrame)
   	end    
 })
+local Section = Tab:AddSection({
+	Name = "remove posters task"
+})
 Tab:AddButton({
-	Name = "teleport to posters/removed posters task",
+	Name = "teleport to poster(tp's every 10 seconds",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_01"].CFrame)
       		wait(10)
@@ -226,7 +241,9 @@ Tab:AddButton({
       		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_Frame_01"].CFrame)
   	end    
 })
-
+local Section = Tab:AddSection({
+	Name = "fix man holes"
+})
 Tab:AddButton({
 	Name = "teleport to man holes/fix them task",
 	Callback = function()
@@ -248,8 +265,11 @@ Tab:AddButton({
       		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
 	end    
   })
+  local Section = Tab:AddSection({
+	Name = "find cat"
+})
 Tab:AddButton({
-	Name = "teleport to cat/find cat task",
+	Name = "teleport to cat",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").Tasks["Find_Cat"].Cat.Torso.CFrame)
   	end    
@@ -346,3 +366,25 @@ Tab:AddButton({
       		teleportTO(game:GetService("Workspace").Tasks.GasCan.Part.CFrame)
   	end    
 })
+--THIS IS FOR THE JUMP Task
+
+local Section = Tab:AddSection({
+	Name = "jump 50 times task"
+})
+Tab:AddButton({
+	Name = "auto jump",
+	Callback = function()
+      		loadstring(game:HttpGet("https://pastebin.com/raw/7zZR8NFv",true))()
+  end
+  	})
+--THIS IS FOR THE WAL Task
+local Section = Tab:AddSection({
+	Name = "walk 500 studs task"
+})
+Tab:AddButton({
+	Name = "auto walk",
+	Callback = function()
+      		loadstring(game:HttpGet("https://pastebin.com/raw/hqq7gXrL",true))()
+  end
+  	})
+
