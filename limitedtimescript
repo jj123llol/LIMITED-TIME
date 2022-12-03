@@ -372,7 +372,7 @@ local Section = Tab:AddSection({
 Tab:AddButton({
 	Name = "auto jump",
 	Callback = function()
-      		loadstring(game:HttpGet("https://pastebin.com/raw/7zZR8NFv",true))()
+      		loadstring(game:HttpGet("https://pastebin.com/raw/PUjACj5w",true))()
   end
   	})
 --THIS IS FOR THE WAL Task
