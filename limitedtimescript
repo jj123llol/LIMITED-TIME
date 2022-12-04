@@ -1,4 +1,463 @@
 
+
+getgenv().AutoJump = true;
+getgenv().Autowalk = true;
+--FOR AUTO JUMP AND AUTO walk
+local keys = {
+ ["a"] = 0x41,
+ ["b"] = 0x42,
+ ["c"] = 0x43,
+ ["d"] = 0x44,
+ ["e"] = 0x45,
+ ["f"] = 0x46,
+ ["g"] = 0x47,
+ ["h"] = 0x48,
+ ["i"] = 0x49,
+ ["j"] = 0x4A,
+ ["k"] = 0x4B,
+ ["l"] = 0x4C,
+ ["m"] = 0x4D,
+ ["n"] = 0x4E,
+ ["o"] = 0x4F,
+ ["p"] = 0x50,
+ ["q"] = 0x51,
+ ["r"] = 0x52,
+ ["s"] = 0x53,
+ ["t"] = 0x54,
+ ["u"] = 0x55,
+ ["v"] = 0x56,
+ ["w"] = 0x57,
+ ["x"] = 0x58,
+ ["y"] = 0x59,
+ ["z"] = 0x5A,
+ ["0"] = 0x30,
+ ["1"] = 0x31,
+ ["2"] = 0x32,
+ ["3"] = 0x33,
+ ["4"] = 0x34,
+ ["5"] = 0x35,
+ ["6"] = 0x36,
+ ["7"] = 0x37,
+ ["8"] = 0x38,
+ ["9"] = 0x39,
+ ["+"] = 0xBB,
+ ["-"] = 0xBD,
+ [","] = 0xBC,
+ ["."] = 0xBE,
+ ["quote"] = 0xDE,
+ ["esc"] = 0x1B,
+ ["tab"] = 0x09,
+ ["caps"] = 0x14,
+ ["lshift"] = 0xA0,
+ ["rshift"] = 0xA1,
+ ["ctrl"] = 0x11,
+ ["lctrl"] = 0xA2,
+ ["rctrl"] = 0xA3,
+ ["lwin"] = 0x5B,
+ ["rwin"] = 0x5C,
+ ["alt"] = 0x12,
+ ["space"] = 0x20,
+ ["enter"] = 0x0D,
+ ["backspace"] = 0x08,
+ ["sshot"] = 0x2C,
+ ["scrolllock"] = 0x91,
+ ["pause"] = 0x13,
+ ["insert"] = 0x2D,
+ ["home"] = 0x24,
+ ["pgup"] = 0x21,
+ ["del"] = 0x2E,
+ ["end"] = 0x23,
+ ["pgdn"] = 0x22,
+ ["up_a"] = 0x26,
+ ["down_a"] = 0x28,
+ ["left_a"] = 0x25,
+ ["right_a"] = 0x27,
+ ["numlock"] = 0x90,
+ ["sleep"] = 0x5F,
+ ["n_0"] = 0x60,
+ ["n_1"] = 0x61,
+ ["n_2"] = 0x62,
+ ["n_3"] = 0x63,
+ ["n_4"] = 0x64,
+ ["n_5"] = 0x65,
+ ["n_6"] = 0x66,
+ ["n_7"] = 0x67,
+ ["n_8"] = 0x68,
+ ["n_9"] = 0x69,
+ ["v_mute"] = 0xAD,
+ ["v_up"] = 0xAF,
+ ["v_down"] = 0xAE,
+ ["next_t"] = 0xB0,
+ ["prev_t"] = 0xB1,
+ ["stop_t"] = 0xB2,
+ ["pause_t"] = 0xB3,
+ ["f1"] = 0x70,
+ ["f2"] = 0x71,
+ ["f3"] = 0x72,
+ ["f4"] = 0x73,
+ ["f5"] = 0x74,
+ ["f6"] = 0x75,
+ ["f7"] = 0x76,
+ ["f8"] = 0x77,
+ ["f9"] = 0x78,
+ ["f10"] = 0x79,
+ ["f11"] = 0x7A,
+ ["f12"] = 0x7B,
+}
+function hold(mousebutton)
+ if mousebutton == "left" then
+  mouse1down()
+ elseif mousebutton == "right" then
+  mouse2down()
+ end
+end
+
+function release(mousebutton)
+ if mousebutton == "left" then
+  mouse1up()
+ elseif mousebutton == "right" then
+  mouse2up()
+ end
+end
+
+function click(mousebutton)
+ if mousebutton == "left" then
+  mouse1click()
+ elseif mousebutton == "right" then
+  mouse2click()
+ end
+end
+
+function move(x,y)
+ mousemoveabs(x,y)
+end
+
+function scroll(p)
+ mousescroll(p)
+end
+
+function loopmove(x,y)
+ if canmove2 ~= false then
+  canmove1 = false
+  spawn(function()
+   local l
+   l = game:GetService("RunService").Heartbeat:Connect(function()
+    if canmove1 == true then
+     l:Disconnect()
+    end
+    wait()
+    move(x,y)
+   end)
+  end)
+ end
+end
+
+function breakmove()
+ canmove1 = false
+end
+
+local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+canmove2 = true
+function togglemove()
+ if canmove1 ~= false then
+  if canmove2 == false then
+   canmove2 = true
+  elseif canmove2 == true then
+   canmove2 = false
+   mx = mouse.X
+   my = mouse.Y
+   spawn(function()
+    local l
+    l = game:GetService("RunService").Heartbeat:Connect(function()
+     if canmove2 == true then
+      l:Disconnect()
+     end
+     wait()
+     move(mx,my)
+    end)
+   end)
+  end
+ end
+end
+
+function type(string)
+ for _,char in pairs(string:split("")) do
+  wait(0.01)
+  if char == " " then
+   keypress(keys["space"])
+  else
+   if char:upper() == char and (char ~= "," and char ~= "." and char ~= "-" and char ~= "+" and char ~= "'" and char ~= '"' and char ~= "&lt;" and char ~= ">" and char ~= "_" and char ~= "=") then
+    keypress(keys["lshift"])
+    keypress(keys[char:lower()])
+                keyrelease(keys["lshift"])
+   else
+    if char == "'" then
+     keyrelease(keys["caps"])
+     keyrelease(keys["lshift"])
+     keypress(keys["quote"])
+    elseif char == '"' then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["quote"])
+     keyrelease(keys["lshift"])
+    elseif char == "&lt;" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys[","])
+     keyrelease(keys["lshift"])
+    elseif char == ">" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["."])
+     keyrelease(keys["lshift"])
+    elseif char == "_" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["-"])
+     keyrelease(keys["lshift"])
+    elseif char == "=" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["+"])
+     keyrelease(keys["lshift"])
+    else
+     keyrelease(keys["caps"])
+     keyrelease(keys["lshift"])
+     keypress(keys[char])
+    end
+   end
+  end
+ end
+end
+
+local keys = {
+ ["a"] = 0x41,
+ ["b"] = 0x42,
+ ["c"] = 0x43,
+ ["d"] = 0x44,
+ ["e"] = 0x45,
+ ["f"] = 0x46,
+ ["g"] = 0x47,
+ ["h"] = 0x48,
+ ["i"] = 0x49,
+ ["j"] = 0x4A,
+ ["k"] = 0x4B,
+ ["l"] = 0x4C,
+ ["m"] = 0x4D,
+ ["n"] = 0x4E,
+ ["o"] = 0x4F,
+ ["p"] = 0x50,
+ ["q"] = 0x51,
+ ["r"] = 0x52,
+ ["s"] = 0x53,
+ ["t"] = 0x54,
+ ["u"] = 0x55,
+ ["v"] = 0x56,
+ ["w"] = 0x57,
+ ["x"] = 0x58,
+ ["y"] = 0x59,
+ ["z"] = 0x5A,
+ ["0"] = 0x30,
+ ["1"] = 0x31,
+ ["2"] = 0x32,
+ ["3"] = 0x33,
+ ["4"] = 0x34,
+ ["5"] = 0x35,
+ ["6"] = 0x36,
+ ["7"] = 0x37,
+ ["8"] = 0x38,
+ ["9"] = 0x39,
+ ["+"] = 0xBB,
+ ["-"] = 0xBD,
+ [","] = 0xBC,
+ ["."] = 0xBE,
+ ["quote"] = 0xDE,
+ ["esc"] = 0x1B,
+ ["tab"] = 0x09,
+ ["caps"] = 0x14,
+ ["lshift"] = 0xA0,
+ ["rshift"] = 0xA1,
+ ["ctrl"] = 0x11,
+ ["lctrl"] = 0xA2,
+ ["rctrl"] = 0xA3,
+ ["lwin"] = 0x5B,
+ ["rwin"] = 0x5C,
+ ["alt"] = 0x12,
+ ["space"] = 0x20,
+ ["enter"] = 0x0D,
+ ["backspace"] = 0x08,
+ ["sshot"] = 0x2C,
+ ["scrolllock"] = 0x91,
+ ["pause"] = 0x13,
+ ["insert"] = 0x2D,
+ ["home"] = 0x24,
+ ["pgup"] = 0x21,
+ ["del"] = 0x2E,
+ ["end"] = 0x23,
+ ["pgdn"] = 0x22,
+ ["up_a"] = 0x26,
+ ["down_a"] = 0x28,
+ ["left_a"] = 0x25,
+ ["right_a"] = 0x27,
+ ["numlock"] = 0x90,
+ ["sleep"] = 0x5F,
+ ["n_0"] = 0x60,
+ ["n_1"] = 0x61,
+ ["n_2"] = 0x62,
+ ["n_3"] = 0x63,
+ ["n_4"] = 0x64,
+ ["n_5"] = 0x65,
+ ["n_6"] = 0x66,
+ ["n_7"] = 0x67,
+ ["n_8"] = 0x68,
+ ["n_9"] = 0x69,
+ ["v_mute"] = 0xAD,
+ ["v_up"] = 0xAF,
+ ["v_down"] = 0xAE,
+ ["next_t"] = 0xB0,
+ ["prev_t"] = 0xB1,
+ ["stop_t"] = 0xB2,
+ ["pause_t"] = 0xB3,
+ ["f1"] = 0x70,
+ ["f2"] = 0x71,
+ ["f3"] = 0x72,
+ ["f4"] = 0x73,
+ ["f5"] = 0x74,
+ ["f6"] = 0x75,
+ ["f7"] = 0x76,
+ ["f8"] = 0x77,
+ ["f9"] = 0x78,
+ ["f10"] = 0x79,
+ ["f11"] = 0x7A,
+ ["f12"] = 0x7B,
+}
+function hold(mousebutton)
+ if mousebutton == "left" then
+  mouse1down()
+ elseif mousebutton == "right" then
+  mouse2down()
+ end
+end
+
+function release(mousebutton)
+ if mousebutton == "left" then
+  mouse1up()
+ elseif mousebutton == "right" then
+  mouse2up()
+ end
+end
+
+function click(mousebutton)
+ if mousebutton == "left" then
+  mouse1click()
+ elseif mousebutton == "right" then
+  mouse2click()
+ end
+end
+
+function move(x,y)
+ mousemoveabs(x,y)
+end
+
+function scroll(p)
+ mousescroll(p)
+end
+
+function loopmove(x,y)
+ if canmove2 ~= false then
+  canmove1 = false
+  spawn(function()
+   local l
+   l = game:GetService("RunService").Heartbeat:Connect(function()
+    if canmove1 == true then
+     l:Disconnect()
+    end
+    wait()
+    move(x,y)
+   end)
+  end)
+ end
+end
+
+function breakmove()
+ canmove1 = false
+end
+
+local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+canmove2 = true
+function togglemove()
+ if canmove1 ~= false then
+  if canmove2 == false then
+   canmove2 = true
+  elseif canmove2 == true then
+   canmove2 = false
+   mx = mouse.X
+   my = mouse.Y
+   spawn(function()
+    local l
+    l = game:GetService("RunService").Heartbeat:Connect(function()
+     if canmove2 == true then
+      l:Disconnect()
+     end
+     wait()
+     move(mx,my)
+    end)
+   end)
+  end
+ end
+end
+
+function type(string)
+ for _,char in pairs(string:split("")) do
+  wait(0.01)
+  if char == " " then
+   keypress(keys["space"])
+  else
+   if char:upper() == char and (char ~= "," and char ~= "." and char ~= "-" and char ~= "+" and char ~= "'" and char ~= '"' and char ~= "&lt;" and char ~= ">" and char ~= "_" and char ~= "=") then
+    keypress(keys["lshift"])
+    keypress(keys[char:lower()])
+                keyrelease(keys["lshift"])
+   else
+    if char == "'" then
+     keyrelease(keys["caps"])
+     keyrelease(keys["lshift"])
+     keypress(keys["quote"])
+    elseif char == '"' then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["quote"])
+     keyrelease(keys["lshift"])
+    elseif char == "&lt;" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys[","])
+     keyrelease(keys["lshift"])
+    elseif char == ">" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["."])
+     keyrelease(keys["lshift"])
+    elseif char == "_" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["-"])
+     keyrelease(keys["lshift"])
+    elseif char == "=" then
+     keyrelease(keys["caps"])
+     keypress(keys["lshift"])
+     keypress(keys["+"])
+     keyrelease(keys["lshift"])
+    else
+     keyrelease(keys["caps"])
+     keyrelease(keys["lshift"])
+     keypress(keys[char])
+    end
+   end
+  end
+ end
+end
+
+
 function teleportTO(placeCFrame)
     local plyr = game.Players.LocalPlayer;
     if plyr.Character then
@@ -154,21 +613,120 @@ Tab:AddButton({
 	Name = "Goto windows (tp's every 15 seconds)",
 	Callback = function()
       		teleportTO(game:GetService("Workspace").Tasks.CleanDirtyWindows.Part.CFrame)
-      		wait(15)
+      		wait(0.9)
+      		keypress(keys["e"])
+   wait(11)
+   keyrelease(keys["e"])
+      		wait(0.9)
       		teleportTO(game:GetService("Workspace").Tasks.CleanDirtyWindows.Part.CFrame)
-      		wait(15)
+      		wait(0.9)
+      		keypress(keys["e"])
+   wait(11)
+   keyrelease(keys["e"])
+      		wait(0.9)
       		teleportTO(game:GetService("Workspace").Tasks.CleanDirtyWindows.Part.CFrame)
-      		wait(15)
+      		wait(0.9)
+      		keypress(keys["e"])
+   wait(11)
+   keyrelease(keys["e"])
       		teleportTO(game:GetService("Workspace").Tasks.CleanDirtyWindows.Part.CFrame)
+      		wait(0.9)
+      		keypress(keys["e"])
+   wait(11)
+   keyrelease(keys["e"])
   	end    
 })
+
+local Section = Tab:AddSection({
+	Name = "pick up body parts"
+})
+Tab:AddButton({
+	Name = "auto pick up body parts",
+	Callback = function()
+      		local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Arm"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Head.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"]["Left Leg"].ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Torso.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Torso.ClickDetector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Body_Parts"].Torso.ClickDetector
+            fireclickdetector(clickdetector)
+            
+            
+  	end    
+})
+
 local Section = Tab:AddSection({
 	Name = "Find hidden sword task"
 })
 Tab:AddButton({
-	Name = "tp to sword ",
+	Name = "Auto find sword  ",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_Sword"].Sword.CFrame)
+      		local clickdetector = game:GetService("Workspace").Tasks["Find_Sword"].Sword.ClickDetector
+            fireclickdetector(clickdetector)
 
   	end    
 })
@@ -176,53 +734,102 @@ local Section = Tab:AddSection({
 	Name = "Bring trophy to david task"
 })
 Tab:AddButton({
-	Name = "teleport to trophy(may have to press a few times)",
+	Name = "Auto give him trophy",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Trophy_David"].TrophyClicker.CFrame)
+      		local clickdetector = game:GetService("Workspace").Tasks["Trophy_David"].TrophyClicker.ClickDetector
+fireclickdetector(clickdetector)
+      		
+      		wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-230.690613, 204.62056, -294.032928, 0.344949752, 8.87526568e-08, 0.938621163, -3.10633546e-08, 1, -8.31404208e-08, -0.938621163, -4.77454576e-10, 0.344949752)
+wait(3)
+keypress(keys["f"])
+   wait(0.5)
+   keyrelease(keys["f"])
   	end    
 })
-Tab:AddButton({
-	Name = "teleport to david",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace").David.Head.CFrame)
-  	end    
-})
+
 
 local Section = Tab:AddSection({
 	Name = "Find plane task"
 })
 Tab:AddButton({
-	Name = "teleport to plane",
+	Name = "Auto find plane",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_Plane"].Plane.Union.CFrame)
+      		local clickdetector = game:GetService("Workspace").Tasks["Find_Plane"].Plane.Detector.ClickDetector
+            fireclickdetector(clickdetector)
 	end    
 })
 local Section = Tab:AddSection({
 	Name = "tell joe he looks nice task"
 })
 Tab:AddButton({
-	Name = "teleport to joe",
+	Name = " auto Tell joe he looks nice",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace")["Hobo joe"].HumanoidRootPart.CFrame)
+      		local args = {
+    [1] = "and you look very nice",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage").remotes.TriggerDialogue2:FireServer(unpack(args))
   	end    
 })
 local Section = Tab:AddSection({
 	Name = "tell david you like his beard task"
 })
 Tab:AddButton({
-	Name = "teleport to david",
+	Name = "Auto tell him his beard looks nice",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").David.Head.CFrame)
+      		game:GetService("ReplicatedStorage").remotes.NiceBeard:FireServer()
   	end    
 })
 local Section = Tab:AddSection({
 	Name = "shake tree for honey task"
 })
 Tab:AddButton({
-	Name = "teleport to honey",
+	Name = "Auto Grab honey",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks.Honey.BeeHives.Hive1.CFrame)
-  	end    
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-162.781403, 212.620514, -264.596588, -0.890535116, -4.44258887e-08, 0.45491451, -1.04888862e-08, 1, 7.71247457e-08, -0.45491451, 6.39107469e-08, -0.890535116)
+      		wait(2)
+      		keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(3)
+   keyrelease(keys["e"])
+   wait(1)--NEXT
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-143.165527, 212.620514, -295.787842, -0.429759324, -4.06169534e-08, -0.902943492, 2.66350431e-09, 1, -4.62505341e-08, 0.902943492, -2.22815917e-08, -0.429759324)
+      		wait(2)
+      		keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(3)
+   keyrelease(keys["e"])
+      wait(1)--NEXT
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-164.503418, 212.620514, -319.164886, 0.0794139728, -6.26257179e-09, 0.996841729, -9.16111464e-10, 1, 6.35539577e-09, -0.996841729, -1.41792533e-09, 0.0794139728)
+      		wait(2)
+      		keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(3)
+   keyrelease(keys["e"])
+         wait(1)--NEXT
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-140.435471, 212.620514, -336.099152, 0.606680393, 4.86767462e-08, -0.794945836, 5.13807841e-09, 1, 6.51540191e-08, 0.794945836, -4.3612161e-08, 0.606680393)
+      		wait(2)
+      		keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(3)
+   keyrelease(keys["e"])
+  
+  
+  end    
 })
 local Section = Tab:AddSection({
 	Name = "remove posters task"
@@ -230,45 +837,71 @@ local Section = Tab:AddSection({
 Tab:AddButton({
 	Name = "teleport to poster(tp's every 10 seconds",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_01"].CFrame)
-      		wait(10)
-      		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_02"].CFrame)
-      		wait(10)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-220.423874, 205.22023, -354.298584, 0.509826362, 1.651562e-09, 0.860277295, 4.13941059e-08, 1, -2.64512021e-08, -0.860277295, 4.90959309e-08, 0.509826362)
+      		wait(1)
+      		keypress(keys["e"])
+            wait(7)
+            keyrelease(keys["e"])
+      		wait(1)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-125.560921, 205.22049, -193.620468, -0.969182074, 5.71139083e-08, 0.246345535, 4.53931364e-08, 1, -5.32572777e-08, -0.246345535, -4.04336014e-08, -0.969182074)
+      		keypress(keys["e"])
+   wait(7)
+   keyrelease(keys["e"])
+      		wait(1)
       		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_03"].CFrame)
-      		wait(10)
-      		teleportTO(game:GetService("Workspace").Tasks["Remove_Posters"]["Meshes/PolygonCity_Props_SM_Prop_Poster_Frame_01"].CFrame)
+      		wait(1)
+      		keypress(keys["e"])
+   wait(7)
+   keyrelease(keys["e"])
+      		wait(1)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-95.1584778, 205.22049, -389.878998, -0.0409257933, 4.0294637e-08, -0.999162197, -3.66429624e-08, 1, 4.1829324e-08, 0.999162197, 3.83241598e-08, -0.0409257933)
+      		wait(1)
+      		keypress(keys["e"])
+           wait(7)
+           keyrelease(keys["e"])
   	end    
 })
 local Section = Tab:AddSection({
 	Name = "fix man holes"
 })
 Tab:AddButton({
-	Name = "teleport to man holes/fix them task",
+	Name = "auto fix manholes/DONT MOVE",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
-      		wait(1)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
-      			wait(1)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-220.828323, 204.3405, -282.679291, -0.771884084, -2.4997604e-08, -0.635763288, -4.3844512e-08, 1, 1.39128478e-08, 0.635763288, 3.86138375e-08, -0.771884084)
+      			wait(4.5)
+      			keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
       		wait(10)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
-      			wait(1)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-52.5282555, 204.420502, -312.059326, -0.284053296, -2.84387944e-08, -0.958808482, 1.26520732e-08, 1, -3.3408817e-08, 0.958808482, -2.16207994e-08, -0.284053296)
+      		wait(4.5)
+      			keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
       		wait(10)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
-      			wait(1)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-112.012177, 204.300491, -346.661163, -0.188059926, -7.95175268e-08, -0.982157528, -6.432672e-08, 1, -6.86450434e-08, 0.982157528, 5.02695947e-08, -0.188059926)
+      		wait(4.5)
+      			keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
       		wait(10)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
-      			wait(1)
-      		teleportTO(game:GetService("Workspace").Tasks["Fix_Drains"].Part.CFrame)
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-56.0430031, 204.22049, -184.787521, -0.662081182, -8.59915588e-08, -0.749432147, -9.15353056e-08, 1, -3.38759918e-08, 0.749432147, 4.61708431e-08, -0.662081182)
+      		wait(5)
+      			keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
 	end    
   })
   local Section = Tab:AddSection({
 	Name = "find cat"
 })
 Tab:AddButton({
-	Name = "teleport to cat",
+	Name = "Find cat",
 	Callback = function()
+      		local clickdetector = game:GetService("Workspace").Tasks["Find_Cat"].Cat.Part.ClickDetector
+
+fireclickdetector(clickdetector)
+      		wait(5)
       		teleportTO(game:GetService("Workspace").Tasks["Find_Cat"].Cat.Torso.CFrame)
   	end    
 })
@@ -277,112 +910,271 @@ local Section = Tab:AddSection({
 	Name = "davids brief case task"
 })
 Tab:AddButton({
-	Name = "teleport to brief case",
+	Name = "Auto complete",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["David's_BriefCase"].Case.CFrame)
+      		local clickdetector = game:GetService("Workspace").Tasks["David's_BriefCase"].Case.ClickDetector
+fireclickdetector(clickdetector)
+wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-230.690613, 204.62056, -294.032928, 0.344949752, 8.87526568e-08, 0.938621163, -3.10633546e-08, 1, -8.31404208e-08, -0.938621163, -4.77454576e-10, 0.344949752)
+wait(3)
+keypress(keys["f"])
+   wait(0.5)
+   keyrelease(keys["f"])
+
   	end    
 })
 
 
-Tab:AddButton({
-	Name = "teleport to david",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace").David.Head.CFrame)
-  	end    
-})
+
 local Section = Tab:AddSection({
 	Name = "joe coffee task"
 })
 Tab:AddButton({
-	Name = "teleport to coffee",
+	Name = "grab coffee and give to joe",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks.CoffeeJoe.Coffee.Detector.CFrame)
+      		local clickdetector = game:GetService("Workspace").Tasks.CoffeeJoe.Coffee.Detector.ClickDetector
+            fireclickdetector(clickdetector)
+      		wait()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-175.554443, 205.22049, -112.485748, -0.930316865, 1.80854389e-08, -0.366756767, 1.17948398e-08, 1, 1.93929637e-08, 0.366756767, 1.37157645e-08, -0.930316865)
+      		wait(2)
+      		keypress(keys["f"])
+   wait(0.1)
+   keyrelease(keys["f"])
+      		
   	end    
 })
 
 
-Tab:AddButton({
-	Name = "teleport to joe",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace")["Hobo joe"].HumanoidRootPart.CFrame)
-  	end    
-})
+
 local Section = Tab:AddSection({
 	Name = "Find 5 car parts task"
 })
 Tab:AddButton({
-	Name = "teleport to tire",
+	Name = "Auto grab parts",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].w.Rim.CFrame)
-  	end    
-})
-Tab:AddButton({
-	Name = "teleport to seat",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].Seat.Detector.CFrame)
-  	end    
-})
-Tab:AddButton({
-	Name = "teleport to bumper",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].Bumper.Detector.CFrame)
-  	end    
-})
-Tab:AddButton({
-	Name = "teleport to engine",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"]["Car engine"].Part.CFrame)
-  	end    
-})
-Tab:AddButton({
-	Name = "teleport to number plate ",
-	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks["Find_CarParts"].NumberPlate.Part.CFrame)
+      		local clickdetector = game:GetService("Workspace").Tasks["Find_CarParts"].Bumper.Detector.ClickDetector
+             fireclickdetector(clickdetector)
+             wait(2)
+             local clickdetector = game:GetService("Workspace").Tasks["Find_CarParts"]["Car engine"].Detector.ClickDetector
+             fireclickdetector(clickdetector)
+             wait(2)
+             local clickdetector = game:GetService("Workspace").Tasks["Find_CarParts"].Seat.Detector.ClickDetector
+             fireclickdetector(clickdetector)
+             wait(2)
+             local clickdetector = game:GetService("Workspace").Tasks["Find_CarParts"].w.Detector.ClickDetector
+             fireclickdetector(clickdetector)
+             wait(2)
+             local clickdetector = game:GetService("Workspace").Tasks["Find_CarParts"].NumberPlate.Detector.ClickDetector
+             fireclickdetector(clickdetector)
   	end    
 })
 local Section = Tab:AddSection({
 	Name = "davids secret"
 })
 Tab:AddButton({
-	Name = "teleport to david",
+	Name = "Find out the secret",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").David.Head.CFrame)
+local args = {
+    [1] = "sure",
+    [2] = 3
+}
+
+game:GetService("ReplicatedStorage").remotes.TriggerDialogue:FireServer(unpack(args))
+
   	end    
 })
 local Section = Tab:AddSection({
 	Name = "Find gas can and fill car"
 })
+
 Tab:AddButton({
-	Name = "teleport to can",
+	Name = "get can and fill car",
 	Callback = function()
-      		teleportTO(game:GetService("Workspace").Tasks.GasCan.Handle.CFrame)
-  	end    
-})
-Tab:AddButton({
-	Name = "teleport to car",
-	Callback = function()
+      		local clickdetector = game:GetService("Workspace").Tasks.GasCan.Handle.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+      		wait()
       		teleportTO(game:GetService("Workspace").Tasks.GasCan.Part.CFrame)
+      		wait(3)
+      		keypress(keys["e"])
+   wait(6)
+   keyrelease(keys["e"])
   	end    
 })
---THIS IS FOR THE JUMP Task
+
 
 local Section = Tab:AddSection({
-	Name = "jump 50 times task"
+	Name = "Clean rubbish task"
 })
 Tab:AddButton({
-	Name = "auto jump",
+	Name = "auto clean",
 	Callback = function()
-      		loadstring(game:HttpGet("https://pastebin.com/raw/PUjACj5w",true))()
-  end
-  	})
---THIS IS FOR THE WAL Task
+      		local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(1.5)
+            local clickdetector = game:GetService("Workspace").Tasks["Clean_rubbish"].RubbishBags.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+  	end    
+})
+
 local Section = Tab:AddSection({
-	Name = "walk 500 studs task"
+	Name = "grab 10 beans"
 })
 Tab:AddButton({
-	Name = "auto walk",
+	Name = "auto grab beans",
 	Callback = function()
-      		loadstring(game:HttpGet("https://pastebin.com/raw/hqq7gXrL",true))()
-  end
-  	})
+      		local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+            wait(2)
+            local clickdetector = game:GetService("Workspace").Tasks["Find_beans"].Beans.ClickDetector -- path to the click detector
+            fireclickdetector(clickdetector)
+  	end    
+})
+
+local Section = Tab:AddSection({
+	Name = "Throw away players around dave"
+})
+Tab:AddButton({
+	Name = "Auto throw away/DONT MOVE",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-225.989487, 204.22049, -290.59726, 0.0869637951, 2.78314669e-08, 0.996211469, 6.22634033e-08, 1, -3.33725616e-08, -0.996211469, 6.4929722e-08, 0.0869637951)
+      		wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-229.713867, 204.22049, -287.900421, -0.218101412, -1.76026855e-08, 0.975926101, 3.38957982e-08, 1, 2.56119872e-08, -0.975926101, 3.86658066e-08, -0.218101412)
+  	 wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+    wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+    wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-228.432327, 204.22049, -300.940216, -0.891663849, -1.68557293e-08, 0.452698082, 3.56623131e-09, 1, 4.42582113e-08, -0.452698082, 4.10778753e-08, -0.891663849)
+  	wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+   	wait(2)
+      		keypress(keys["e"])
+   wait(1.5)
+   keyrelease(keys["e"])
+  	end    
+})
+
+
+
+
+--THIS IS FOR THE WALK Task
+local Section = Tab:AddSection({
+	Name = "walk whatever studs task AND jump 50 times task"
+})
+
+Tab:AddToggle({
+	Name = "Auto walk AND Auto jump",
+	Default = (bool),
+	Callback = function(bool)
+		getgenv().Autowalk = bool
+		print(bool)
+		if bool then
+		Autowalk()
+		end
+	end    
+    })
+
+function Autowalk()
+    while getgenv().Autowalk == true do
+        wait()
+         keypress(keys["w"])
+   wait()
+   keyrelease(keys["w"])
+local args = {
+    [1] = 13,
+    [2] = workspace.Tasks:FindFirstChild("UnNamed Task")
+}
+
+game:GetService("ReplicatedStorage").remotes.createQuestServer:FireServer(unpack(args))
+
+end
+end
+
+
+function AutoJump()
+    while getgenv().AutoJump == true do
+        wait()
+        keypress(keys["space"])
+   wait(0.1)
+   keyrelease(keys["space"])
+
+
+end
+end
 
